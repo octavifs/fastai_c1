@@ -1,6 +1,7 @@
-FROM nvidia/cuda:8.0-cudnn6-runtime-ubuntu16.04
+FROM nvidia/cuda:8.0-runtime-ubuntu16.04
 
 ARG MINICONDA_VERSION=Miniconda3-latest-Linux-x86_64
+ARG ENV_TYPE=gpu
 
 # Install miniconda
 RUN apt-get update && apt-get install -y \
@@ -14,8 +15,8 @@ RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
 ENV PATH /opt/conda/bin:$PATH
 
 # Setup environment
-COPY environment.yml ./environment.yml
-RUN conda env update -n root --file environment.yml
+COPY environment-$ENV_TYPE.yml ./environment-$ENV_TYPE.yml
+RUN conda env update -n root --file environment-$ENV_TYPE.yml
 
 # Run
 VOLUME ["/notebooks"]
